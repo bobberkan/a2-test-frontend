@@ -19,7 +19,7 @@ const Login = () => {
 			)
 			localStorage.setItem('token', res.data.token)
 			alert('Login successful!')
-			navigate('/dashboard') // Dashboard page’ga yo‘naltiramiz
+			navigate('/dashboard')
 		} catch (err) {
 			alert(err.response.data.message || 'Login failed')
 		}
