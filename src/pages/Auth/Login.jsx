@@ -10,10 +10,13 @@ const Login = () => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			const res = await axios.post('https://a2-test-backend.onrender.com/', {
-				email,
-				password,
-			})
+			const res = await axios.post(
+				'https://a2-test-backend.onrender.com/api/auth/login',
+				{
+					email,
+					password,
+				}
+			)
 			localStorage.setItem('token', res.data.token)
 			alert('Login successful!')
 			navigate('/dashboard') // Dashboard page’ga yo‘naltiramiz

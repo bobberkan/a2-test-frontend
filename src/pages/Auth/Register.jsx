@@ -11,11 +11,14 @@ const Register = () => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			await axios.post('https://a2-test-backend.onrender.com/', {
-				name,
-				email,
-				password,
-			})
+			await axios.post(
+				'https://a2-test-backend.onrender.com/api/auth/register',
+				{
+					name,
+					email,
+					password,
+				}
+			)
 			alert('Registration successful! Please login.')
 			navigate('/login')
 		} catch (err) {
