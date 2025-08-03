@@ -10,7 +10,7 @@ const Login = () => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			const res = await axios.post('https://a2-test-backend.onrender.com', {
+			const res = await axios.post('https://a2-test-backend.onrender.com/', {
 				email,
 				password,
 			})
