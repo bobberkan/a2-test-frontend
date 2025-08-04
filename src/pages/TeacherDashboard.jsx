@@ -1,21 +1,14 @@
+import DashboardLayout from '../components/DashboardLayout'
+import ManageLessons from '../components/ManageTest'
+import StudentProgress from '../components/StudentProgress' // (agar mavjud bo‘lsa)
+
 const TeacherDashboard = () => {
-	const handleLogout = () => {
-		localStorage.removeItem('token')
-		window.location.href = '/login'
+	const pages = {
+		'Manage Lessons': <ManageLessons />,
+		'Student Progress': <StudentProgress />, // agar yo'q bo'lsa, vaqtinchalik <div>Student Progress</div> yoz
 	}
 
-	return (
-		<div className='text-center mt-10'>
-			<h1 className='text-3xl font-bold'>Teacher Dashboard</h1>
-			<p className='mb-4'>Welcome to the Teacher Dashboard!</p>
-			<button
-				onClick={handleLogout}
-				className='bg-red-500 text-white py-2 px-4 rounded'
-			>
-				Logout
-			</button>
-		</div>
-	)
+	return <DashboardLayout role='teacher' pages={pages} />
 }
 
 export default TeacherDashboard

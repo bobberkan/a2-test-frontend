@@ -16,6 +16,22 @@ const Home = () => {
 				Test your Listening, Reading, Writing, and Speaking skills like a real
 				exam.
 			</p>
+
+			<div className='flex space-x-4 mb-6'>
+				<button
+					onClick={() => navigate('/login')}
+					className='bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600 transition shadow-md'
+				>
+					Login
+				</button>
+				<button
+					onClick={() => navigate('/register')}
+					className='bg-green-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-600 transition shadow-md'
+				>
+					Register
+				</button>
+			</div>
+
 			<button
 				onClick={startTest}
 				className='bg-blue-600 text-white px-8 py-4 rounded-xl text-xl hover:bg-blue-700 transition shadow-lg'
