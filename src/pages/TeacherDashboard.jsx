@@ -1,11 +1,13 @@
 import DashboardLayout from '../components/DashboardLayout'
-import ManageLessons from '../components/ManageTest'
-import StudentProgress from '../components/StudentProgress' // (agar mavjud bo‘lsa)
+import ManageLessons from '../components/ManageLessons'
+import StudentProgress from '../components/StudentProgress'
+import ManageTests from '../components/ManageTests' // <-- NEW
 
 const TeacherDashboard = () => {
 	const pages = {
 		'Manage Lessons': <ManageLessons />,
-		'Student Progress': <StudentProgress />, // agar yo'q bo'lsa, vaqtinchalik <div>Student Progress</div> yoz
+		'Student Progress': <StudentProgress />,
+		'Manage Tests': <ManageTests /> // <-- NEW TAB
 	}
 
 	return <DashboardLayout role='teacher' pages={pages} />

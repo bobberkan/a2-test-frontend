@@ -7,7 +7,7 @@ const DashboardLayout = ({ role, children, pages }) => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 	const [activePage, setActivePage] = useState(Object.keys(pages)[0]) // default page
 
-	const user = JSON.parse(localStorage.getItem('user'))
+	const user = JSON.parse(sessionStorage.getItem('user'))
 
 	const handleLogout = () => {
 		localStorage.removeItem('token')
@@ -64,6 +64,7 @@ const DashboardLayout = ({ role, children, pages }) => {
 				{/* Page Content */}
 				<div className='p-6 overflow-auto'>{pages[activePage]}</div>
 			</div>
+			<div className='p-6 overflow-auto'>{children}</div>
 		</div>
 	)
 }

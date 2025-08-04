@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 const ManageLessons = () => {
 	const [lessons, setLessons] = useState([])
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 
-	const token = localStorage.getItem('token')
+	const token = sessionStorage.getItem('token')
 
 	const fetchLessons = async () => {
-		const res = await axios.get('https://a2-test-backend.onrender.com/api/lessons', {
-			headers: { Authorization: `Bearer ${token}` }
-		})
+		const res = await axios.get(
+			'https://a2-test-backend.onrender.com/api/lessons',
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		)
 		setLessons(res.data)
 	}
 
@@ -21,18 +24,25 @@ const ManageLessons = () => {
 
 	const handleCreate = async e => {
 		e.preventDefault()
-		await axios.post('https://a2-test-backend.onrender.com/api/lessons', { title, description }, {
-			headers: { Authorization: `Bearer ${token}` }
-		})
+		await axios.post(
+			'https://a2-test-backend.onrender.com/api/lessons',
+			{ title, description },
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		)
 		setTitle('')
 		setDescription('')
 		fetchLessons()
 	}
 
 	const handleDelete = async id => {
-		await axios.delete(`https://a2-test-backend.onrender.com/api/lessons/${id}`, {
-			headers: { Authorization: `Bearer ${token}` }
-		})
+		await axios.delete(
+			`https://a2-test-backend.onrender.com/api/lessons/${id}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		)
 		fetchLessons()
 	}
 
@@ -66,7 +76,10 @@ const ManageLessons = () => {
 
 			<ul className='space-y-2'>
 				{lessons.map(lesson => (
-					<li key={lesson._id} className='flex justify-between items-center bg-white p-4 shadow rounded'>
+					<li
+						key={lesson._id}
+						className='flex justify-between items-center bg-white p-4 shadow rounded'
+					>
 						<div>
 							<h3 className='font-semibold'>{lesson.title}</h3>
 							<p className='text-sm text-gray-600'>{lesson.description}</p>
