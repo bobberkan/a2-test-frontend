@@ -1,6 +1,6 @@
 import DashboardLayout from '../components/DashboardLayout'
-import StudentQuiz from '../components/StudentQuiz' // <-- NEW
-import SubmitTestResult from '../components/SubmitTestResult'
+import StudentQuiz from '../components/StudentQuiz'
+import ListeningTest from '../components/Test/ListeningTest' // ← ADD THIS
 
 const StudentDashboard = () => {
 	const pages = {
@@ -11,7 +11,12 @@ const StudentDashboard = () => {
 					<p>You have 5 lessons to complete this week.</p>
 				</div>
 				<StudentQuiz />
-				<SubmitTestResult />
+			</div>
+		),
+		// ← NEW PAGE
+		'Listening Test': (
+			<div>
+				<ListeningTest />
 			</div>
 		),
 		'Upcoming Quizzes': (

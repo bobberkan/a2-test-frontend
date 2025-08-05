@@ -1,21 +1,45 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const StudentQuiz = () => {
 	const [tests, setTests] = useState([])
 	const [answers, setAnswers] = useState({})
+	const [loading, setLoading] = useState(true)
+	const navigate = useNavigate()
+
 	const token = sessionStorage.getItem('token')
 
 	const fetchTests = async () => {
-		const res = await axios.get(
-			'https://a2-test-backend.onrender.com/api/tests',
-			{ headers: { Authorization: `Bearer ${token}` } }
-		)
-		setTests(res.data)
+		try {
+			const res = await axios.get(
+				'https://a2-test-backend.onrender.com/api/tests',
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			)
+			setTests(res.data)
+		} catch (err) {
+			console.error('Failed to fetch tests', err)
+			if (err.response?.status === 403) {
+				alert('Access Denied. Please login again.')
+				sessionStorage.removeItem('token')
+				sessionStorage.removeItem('user')
+				navigate('/login')
+			} else {
+				alert('Failed to load tests.')
+			}
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {
-		fetchTests()
+		if (!token) {
+			navigate('/login')
+		} else {
+			fetchTests()
+		}
 	}, [])
 
 	const handleOptionSelect = (questionId, option) => {
@@ -24,11 +48,14 @@ const StudentQuiz = () => {
 
 	const handleSubmit = async () => {
 		let correctCount = 0
+
 		tests.forEach(test => {
-			if (answers[test._id] === test.correctAnswer) correctCount++
+			if (answers[test._id] === test.correctAnswer) {
+				correctCount++
+			}
 		})
 
-		const score = (correctCount * 100) / tests.length
+		const score = Math.round((correctCount * 100) / tests.length)
 
 		try {
 			await axios.post(
@@ -37,9 +64,19 @@ const StudentQuiz = () => {
 				{ headers: { Authorization: `Bearer ${token}` } }
 			)
 			alert(`Test submitted successfully! Your score: ${score}%`)
+			navigate('/student-dashboard')
 		} catch (err) {
-			alert(err.response?.data?.message || 'Submission failed')
+			console.error('Submission Error:', err)
+			alert(err.response?.data?.message || 'Failed to submit result.')
 		}
+	}
+
+	if (loading) {
+		return <div>Loading tests...</div>
+	}
+
+	if (tests.length === 0) {
+		return <div>No tests available at the moment.</div>
 	}
 
 	return (

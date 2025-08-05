@@ -1,13 +1,15 @@
 import DashboardLayout from '../components/DashboardLayout'
 import ManageLessons from '../components/ManageLessons'
+import ManageListeningTests from '../components/ManageListeningTests'
+import ManageTests from '../components/ManageTests'
 import StudentProgress from '../components/StudentProgress'
-import ManageTests from '../components/ManageTests' // <-- NEW
 
 const TeacherDashboard = () => {
 	const pages = {
 		'Manage Lessons': <ManageLessons />,
 		'Student Progress': <StudentProgress />,
-		'Manage Tests': <ManageTests /> // <-- NEW TAB
+		'Manage Tests': <ManageTests />,
+		'Manage Listening Test': <ManageListeningTests />,
 	}
 
 	return <DashboardLayout role='teacher' pages={pages} />
