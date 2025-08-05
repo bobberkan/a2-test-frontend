@@ -1,6 +1,6 @@
 import DashboardLayout from '../components/DashboardLayout'
 import StudentQuiz from '../components/StudentQuiz'
-import ListeningTest from '../components/Test/ListeningTest' // ← ADD THIS
+import ListeningTest from '../components/Test/ListeningTest'; // ← ADD THIS
 
 const StudentDashboard = () => {
 	const pages = {

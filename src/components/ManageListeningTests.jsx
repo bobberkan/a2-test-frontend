@@ -1,16 +1,34 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const ManageListeningTests = () => {
 	const [title, setTitle] = useState('')
 	const [audioFile, setAudioFile] = useState(null)
 	const [questions, setQuestions] = useState([
-		{ question: '', options: ['', '', '', ''], correctAnswer: 'A' },
+		{ questionText: '', options: ['', '', '', ''], correctAnswer: 'A' },
 	])
+	const [tests, setTests] = useState([])
 
 	const token = sessionStorage.getItem('token')
-	// console.log('TOKEN:', sessionStorage.getItem('token'))
-	
+
+	useEffect(() => {
+		fetchTests()
+	}, [])
+
+	const fetchTests = async () => {
+		try {
+			const res = await axios.get(
+				'https://a2-test-backend.onrender.com/api/listening-tests',
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			)
+			setTests(res.data)
+		} catch (err) {
+			console.error(err)
+			alert('Failed to fetch tests')
+		}
+	}
 
 	const handleFileChange = e => {
 		setAudioFile(e.target.files[0])
@@ -31,7 +49,7 @@ const ManageListeningTests = () => {
 	const addQuestion = () => {
 		setQuestions([
 			...questions,
-			{ question: '', options: ['', '', '', ''], correctAnswer: 'A' },
+			{ questionText: '', options: ['', '', '', ''], correctAnswer: 'A' },
 		])
 	}
 
@@ -52,21 +70,41 @@ const ManageListeningTests = () => {
 				}
 			)
 			alert('Listening Test Uploaded!')
-			// Clear form
 			setTitle('')
 			setAudioFile(null)
 			setQuestions([
-				{ question: '', options: ['', '', '', ''], correctAnswer: 'A' },
+				{ questionText: '', options: ['', '', '', ''], correctAnswer: 'A' },
 			])
+			fetchTests() // Refresh list
 		} catch (err) {
+			console.error(err)
 			alert('Upload failed.')
+		}
+	}
+
+	const handleDelete = async id => {
+		if (window.confirm('Are you sure you want to delete this test?')) {
+			try {
+				await axios.delete(
+					`https://a2-test-backend.onrender.com/api/listening-tests/${id}`,
+					{
+						headers: { Authorization: `Bearer ${token}` },
+					}
+				)
+				alert('Test deleted')
+				fetchTests()
+			} catch (err) {
+				console.error(err)
+				alert('Failed to delete test.')
+			}
 		}
 	}
 
 	return (
 		<div>
-			<h2 className='text-xl font-semibold mb-4'>Upload Listening Test</h2>
-			<form onSubmit={handleSubmit} className='space-y-4'>
+			<h2 className='text-xl font-semibold mb-4'>Manage Listening Tests</h2>
+
+			<form onSubmit={handleSubmit} className='space-y-4 mb-10'>
 				<input
 					type='text'
 					placeholder='Test Title'
@@ -88,9 +126,9 @@ const ManageListeningTests = () => {
 						<input
 							type='text'
 							placeholder={`Question ${qIdx + 1}`}
-							value={q.question}
+							value={q.questionText}
 							onChange={e =>
-								handleQuestionChange(qIdx, 'question', e.target.value)
+								handleQuestionChange(qIdx, 'questionText', e.target.value)
 							}
 							className='border px-3 py-2 w-full rounded'
 							required
@@ -120,6 +158,7 @@ const ManageListeningTests = () => {
 						</select>
 					</div>
 				))}
+
 				<button
 					type='button'
 					onClick={addQuestion}
@@ -134,6 +173,29 @@ const ManageListeningTests = () => {
 					Upload Test
 				</button>
 			</form>
+
+			<h3 className='text-lg font-semibold mb-4'>Existing Listening Tests</h3>
+			<ul className='space-y-4'>
+				{tests.map(test => (
+					<li
+						key={test._id}
+						className='bg-white p-4 rounded shadow flex justify-between items-center'
+					>
+						<div>
+							<h4 className='font-bold'>{test.title}</h4>
+							<p className='text-sm text-gray-600'>
+								{test.questions.length} Questions
+							</p>
+						</div>
+						<button
+							onClick={() => handleDelete(test._id)}
+							className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'
+						>
+							Delete
+						</button>
+					</li>
+				))}
+			</ul>
 		</div>
 	)
 }

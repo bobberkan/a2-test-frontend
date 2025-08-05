@@ -18,10 +18,11 @@ const ListeningTest = () => {
 					}
 				)
 				if (res.data.length > 0) {
-					setTest(res.data[0]) // Hozircha faqat 1-ta testni ko‘rsatamiz
+					setTest(res.data[3]) // Show first test for now
 				}
 			} catch (err) {
-				alert('Failed to load Listening Test.')
+				console.error(err)
+				alert('Failed to fetch test.')
 			}
 		}
 		fetchTest()
@@ -44,12 +45,18 @@ const ListeningTest = () => {
 		try {
 			await axios.post(
 				'https://a2-test-backend.onrender.com/api/results/submit',
-				{ testType: 'listening', score },
-				{ headers: { Authorization: `Bearer ${token}` } }
+				{
+					testType: 'listening',
+					score,
+				},
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
 			)
 			alert(`Submitted! Your score: ${score}%`)
 			navigate('/student-dashboard')
 		} catch (err) {
+			console.error(err)
 			alert('Submission failed.')
 		}
 	}
@@ -59,7 +66,10 @@ const ListeningTest = () => {
 	return (
 		<div className='bg-white shadow p-6 rounded-lg'>
 			<h2 className='text-xl font-bold mb-4'>{test.title}</h2>
-			<audio controls src={test.audioUrl} className='mb-6 w-full'></audio>
+			<audio
+				controls
+				src={`https://a2-test-backend.onrender.com/uploads/${test.audioUrl}`}
+			/>
 
 			{test.questions.map((q, idx) => (
 				<div key={idx} className='mb-4'>
